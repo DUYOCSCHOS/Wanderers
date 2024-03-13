@@ -1,0 +1,12 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public abstract class Equipment : Item
+{
+    protected Equipment(){
+        stack = 1;
+    }
+
+    public abstract void Equip();
+}

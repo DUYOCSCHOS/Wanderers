@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -17,9 +16,19 @@ public class StaminaComponent : MonoBehaviour, VisitableComponent
         visitor.Visit(this);
     }
 
-    private async void Start(){
+    private void Awake(){
         currentSP = maxSP;
-        await Regenerate();
+    }
+
+    private async void Start(){
+        try 
+        {
+            await Regenerate();
+        }
+        catch (OperationCanceledException)
+        { 
+            Debug.Log("Exit token was cancelled");
+        }
     }
 
     private void FixedUpdate(){
@@ -27,13 +36,15 @@ public class StaminaComponent : MonoBehaviour, VisitableComponent
     }
 
     private async Task Regenerate(){
-        if (currentSP >= maxSP){
-            currentSP = maxSP;
+        while (!Application.exitCancellationToken.IsCancellationRequested){
+            if (currentSP >= maxSP){
+                currentSP = maxSP;
+            }
+            else {
+                currentSP += regeneratedSP;
+            }
+            await Task.Delay(100, Application.exitCancellationToken);
+            await Regenerate();
         }
-        else {
-            currentSP += regeneratedSP;
-        }
-        await Task.Delay(100);
-        await Regenerate();
     }
 }

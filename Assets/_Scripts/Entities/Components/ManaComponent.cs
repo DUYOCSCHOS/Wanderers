@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -17,9 +16,19 @@ public class ManaComponent : MonoBehaviour, VisitableComponent
         visitor.Visit(this);
     }
 
-    private async void Start(){
+    private void Awake(){
         currentMP = maxMP;
-        await Regenerate();
+    }
+
+    private async void Start(){
+        try 
+        {
+            await Regenerate();
+        }
+        catch (OperationCanceledException)
+        { 
+            Debug.Log("Exit token was cancelled");
+        }
     }
 
     private void FixedUpdate(){

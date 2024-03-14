@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -22,11 +20,18 @@ public class HealthComponent : MonoBehaviour, VisitableComponent
 
     private void Awake(){
         CollapseEvent += GetComponent<Entity>().OnCollapse;
+        currentHP = maxHP;
     }
 
     private async void Start(){
-        currentHP = maxHP;
-        await Regenerate();
+        try 
+        {
+            await Regenerate();
+        }
+        catch (OperationCanceledException)
+        { 
+            Debug.Log("Exit token was cancelled");
+        }
     }
 
     private void Update(){

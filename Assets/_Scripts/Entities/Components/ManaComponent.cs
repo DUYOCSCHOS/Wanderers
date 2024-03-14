@@ -1,5 +1,5 @@
 using System;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class ManaComponent : MonoBehaviour, VisitableComponent
@@ -21,28 +21,21 @@ public class ManaComponent : MonoBehaviour, VisitableComponent
     }
 
     private async void Start(){
-        try 
-        {
-            await Regenerate();
-        }
-        catch (OperationCanceledException)
-        { 
-            Debug.Log("Exit token was cancelled");
-        }
+        await Regenerate();
     }
 
     private void FixedUpdate(){
         currentMP = Mathf.Clamp(currentMP, 0, maxMP);
     }
 
-    private async Task Regenerate(){
+    private async UniTask Regenerate(){
         if (currentMP >= maxMP){
             currentMP = maxMP;
         }
         else {
             currentMP += regeneratedMP;
         }
-        await Task.Delay(100);
+        await UniTask.Delay(TimeSpan.FromSeconds(1), DelayType.DeltaTime, PlayerLoopTiming.Update);
         await Regenerate();
     }
 }

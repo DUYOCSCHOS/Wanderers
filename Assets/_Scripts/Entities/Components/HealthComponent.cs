@@ -1,5 +1,5 @@
 using System;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class HealthComponent : MonoBehaviour, VisitableComponent
@@ -24,14 +24,7 @@ public class HealthComponent : MonoBehaviour, VisitableComponent
     }
 
     private async void Start(){
-        try 
-        {
-            await Regenerate();
-        }
-        catch (OperationCanceledException)
-        { 
-            Debug.Log("Exit token was cancelled");
-        }
+        await Regenerate();
     }
 
     private void Update(){
@@ -39,14 +32,14 @@ public class HealthComponent : MonoBehaviour, VisitableComponent
         if (currentHP <= 0) CollapseEvent.Invoke();
     }
 
-    private async Task Regenerate(){
+    private async UniTask Regenerate(){
         if (currentHP >= maxHP){
             currentHP = maxHP;
         }
         else {
             currentHP += regeneratedHP;
         }
-        await Task.Delay(100);
+        await UniTask.Delay(TimeSpan.FromSeconds(1), DelayType.DeltaTime, PlayerLoopTiming.Update);
         await Regenerate();
     }
 }

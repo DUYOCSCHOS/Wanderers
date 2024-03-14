@@ -1,5 +1,5 @@
 using System;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class StaminaComponent : MonoBehaviour, VisitableComponent
@@ -21,30 +21,21 @@ public class StaminaComponent : MonoBehaviour, VisitableComponent
     }
 
     private async void Start(){
-        try 
-        {
-            await Regenerate();
-        }
-        catch (OperationCanceledException)
-        { 
-            Debug.Log("Exit token was cancelled");
-        }
+        await Regenerate();
     }
 
     private void FixedUpdate(){
         currentSP = Mathf.Clamp(currentSP, 0, maxSP);
     }
 
-    private async Task Regenerate(){
-        while (!Application.exitCancellationToken.IsCancellationRequested){
-            if (currentSP >= maxSP){
-                currentSP = maxSP;
-            }
-            else {
-                currentSP += regeneratedSP;
-            }
-            await Task.Delay(100, Application.exitCancellationToken);
-            await Regenerate();
+    private async UniTask Regenerate(){
+        if (currentSP >= maxSP){
+            currentSP = maxSP;
         }
+        else {
+            currentSP += regeneratedSP;
+        }
+        await UniTask.Delay(TimeSpan.FromSeconds(0.1f), DelayType.DeltaTime, PlayerLoopTiming.Update);
+        await Regenerate();
     }
 }

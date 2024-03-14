@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class StaminaComponent : MonoBehaviour, VisitableComponent
@@ -16,25 +17,23 @@ public class StaminaComponent : MonoBehaviour, VisitableComponent
         visitor.Visit(this);
     }
 
-    private void Start(){
+    private async void Start(){
         currentSP = maxSP;
+        await Regenerate();
     }
 
-    private void Update(){
+    private void FixedUpdate(){
         currentSP = Mathf.Clamp(currentSP, 0, maxSP);
-        if (currentSP <= 0){
-            Regenerate();
-        }
-        // if (out of combat for ..3-4 secs) => RecoverSP
     }
 
-    private void Regenerate(){
-        currentSP += regeneratedSP;
+    private async Task Regenerate(){
         if (currentSP >= maxSP){
             currentSP = maxSP;
-            return;
         }
-        // delay ... secs
-        Regenerate();
+        else {
+            currentSP += regeneratedSP;
+        }
+        await Task.Delay(100);
+        await Regenerate();
     }
 }

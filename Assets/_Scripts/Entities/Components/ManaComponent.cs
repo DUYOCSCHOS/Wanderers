@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class ManaComponent : MonoBehaviour, VisitableComponent
@@ -16,15 +17,23 @@ public class ManaComponent : MonoBehaviour, VisitableComponent
         visitor.Visit(this);
     }
 
-    private void Start(){
+    private async void Start(){
         currentMP = maxMP;
+        await Regenerate();
     }
 
-    private void Update(){
+    private void FixedUpdate(){
         currentMP = Mathf.Clamp(currentMP, 0, maxMP);
     }
 
-    private void Regenerate(){
-        
+    private async Task Regenerate(){
+        if (currentMP >= maxMP){
+            currentMP = maxMP;
+        }
+        else {
+            currentMP += regeneratedMP;
+        }
+        await Task.Delay(100);
+        await Regenerate();
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class HealthComponent : MonoBehaviour, VisitableComponent
@@ -23,8 +24,9 @@ public class HealthComponent : MonoBehaviour, VisitableComponent
         CollapseEvent += GetComponent<Entity>().OnCollapse;
     }
 
-    private void Start(){
+    private async void Start(){
         currentHP = maxHP;
+        await Regenerate();
     }
 
     private void Update(){
@@ -32,7 +34,14 @@ public class HealthComponent : MonoBehaviour, VisitableComponent
         if (currentHP <= 0) CollapseEvent.Invoke();
     }
 
-    private void Regenerate(){
-        
+    private async Task Regenerate(){
+        if (currentHP >= maxHP){
+            currentHP = maxHP;
+        }
+        else {
+            currentHP += regeneratedHP;
+        }
+        await Task.Delay(100);
+        await Regenerate();
     }
 }

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HealthComponent : MonoBehaviour, Visitable
+public class HealthComponent : MonoBehaviour, VisitableComponent
 {
     [Header("Stats")]
     [SerializeField] private float currentHP;
@@ -13,18 +13,23 @@ public class HealthComponent : MonoBehaviour, Visitable
     [SerializeField] private float regeneratedHP;
     public float RegeneratedHP { get {return regeneratedHP;} set {regeneratedHP = value;}}
 
-    public event Action healthEvent;
+    public event Action CollapseEvent;
 
-    public void Accept(StatsComponentVisitor visitor){
+    public void Accept(ComponentVisitor visitor){
         visitor.Visit(this);
     }
 
     private void Awake(){
-        healthEvent += GetComponent<Entity>().OnCollapse;
+        CollapseEvent += GetComponent<Entity>().OnCollapse;
+    }
+
+    private void Start(){
+        currentHP = maxHP;
     }
 
     private void Update(){
-        if (currentHP <= 0) healthEvent.Invoke();
+        currentHP = Mathf.Clamp(currentHP, 0, maxHP);
+        if (currentHP <= 0) CollapseEvent.Invoke();
     }
 
     private void Regenerate(){

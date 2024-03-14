@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ManaComponent : MonoBehaviour, Visitable
+public class ManaComponent : MonoBehaviour, VisitableComponent
 {
     [Header("Stats")]
     [SerializeField] private float currentMP;
@@ -12,12 +12,16 @@ public class ManaComponent : MonoBehaviour, Visitable
     [SerializeField] private float regeneratedMP;
     public float RegeneratedMP { get {return regeneratedMP;} set {regeneratedMP = value;}}
 
-    public void Accept(StatsComponentVisitor visitor){
+    public void Accept(ComponentVisitor visitor){
         visitor.Visit(this);
     }
 
-    private void Update(){
+    private void Start(){
+        currentMP = maxMP;
+    }
 
+    private void Update(){
+        currentMP = Mathf.Clamp(currentMP, 0, maxMP);
     }
 
     private void Regenerate(){

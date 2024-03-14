@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StaminaComponent : MonoBehaviour, Visitable
+public class StaminaComponent : MonoBehaviour, VisitableComponent
 {
     [Header("Stats")]
     [SerializeField] private float currentSP;
@@ -12,12 +12,19 @@ public class StaminaComponent : MonoBehaviour, Visitable
     [SerializeField] private float regeneratedSP = 1;
     public float RegeneratedSP { get {return regeneratedSP;} set {regeneratedSP = value;}}
 
-    public void Accept(StatsComponentVisitor visitor){
+    public void Accept(ComponentVisitor visitor){
         visitor.Visit(this);
     }
 
+    private void Start(){
+        currentSP = maxSP;
+    }
+
     private void Update(){
-        if (currentSP <= 0) {Regenerate();}
+        currentSP = Mathf.Clamp(currentSP, 0, maxSP);
+        if (currentSP <= 0){
+            Regenerate();
+        }
         // if (out of combat for ..3-4 secs) => RecoverSP
     }
 

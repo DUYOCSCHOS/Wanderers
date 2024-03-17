@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Item/Consumable Item/Food", fileName = "New Food")]
@@ -11,7 +9,8 @@ public class Food : ConsumableItem
     public Stats stats = new Stats();
 
     public override void Consume(){
-        StatsEffect statsEffect = new StatsEffect(stats);
-        //Player.Instance.effectSystem.effects.Add(statsEffect);
+        Effect effect = new Effect(name, description, sprite, duration)
+        .AddModifier(new StatsModifier(stats));
+        Player.Instance.effectSystem.effects.Add(effect.Init());
     }
 }

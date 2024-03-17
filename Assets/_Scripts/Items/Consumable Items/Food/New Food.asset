@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efeae107b71d0994abcacb66538ff13a, type: 3}
+  m_Name: New Food
+  m_EditorClassIdentifier: 
+  name: asda
+  description: fa
+  tier: 0
+  sprite: {fileID: 0}
+  stack: 99
+  duration: 10
+  stats:
+    MaxHP:
+      baseValue: 0
+      bonusValue: 20
+      multiplier: 1
+    MaxMP:
+      baseValue: 0
+      bonusValue: 0
+      multiplier: 1
+    MaxSP:
+      baseValue: 0
+      bonusValue: 0
+      multiplier: 1
+    PhysicalPower:
+      baseValue: 0
+      bonusValue: 0
+      multiplier: 1
+    PhysicalResistance:
+      baseValue: 0
+      bonusValue: 0
+      multiplier: 1
+    MagicalPower:
+      baseValue: 0
+      bonusValue: 0
+      multiplier: 1
+    MagicalResistance:
+      baseValue: 0
+      bonusValue: 0
+      multiplier: 1
+    CritRate:
+      baseValue: 0
+      bonusValue: 0
+      multiplier: 1
+    CritDamage:
+      baseValue: 0
+      bonusValue: 0
+      multiplier: 1
+    Accuracy:
+      baseValue: 0
+      bonusValue: 0
+      multiplier: 1
+    Speed:
+      baseValue: 0
+      bonusValue: 0
+      multiplier: 1

@@ -7,18 +7,19 @@ public class InputManager : MonoBehaviour
 {
     public static InputManager Instance { get; private set; }
 
+    [SerializeField] Food food;
+
     private void Awake(){
         Instance = this;
     }
 
-    private async void Update(){
+    private void Update(){
         if (Input.GetKeyDown(KeyCode.Space)){
-            await TestDebug();
+            TestDebug();
         }
     }
 
-    private async Task TestDebug(){
-        await Task.Delay(5000);
-        Debug.Log("hello");
+    private void TestDebug(){
+        food.Consume();
     }
 }
